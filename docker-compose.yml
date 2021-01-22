@@ -1,0 +1,45 @@
+version: '3'
+services:
+  #1. Data Collector:
+  # takes tweets from twitter API and saves it into mongodb
+  #image: self-made
+  #DONE
+  tweet_collector:
+    build: twitter_collector/
+    volumes:
+    - ./twitter_collector/:/code
+    depends_on:
+    - mongodb
+
+  #2. Receives tweets from the tweet_collector: done
+  # stores tweets
+  mongodb:
+    image: 'mongo'
+    ports:
+    - 27017:27017
+  #3. LINK in the pipeline, takes tweets text from mongodb: done
+  # runs sentiment analysis: DONE
+  # write into postgres: TO DO
+  etl:
+    build: etl/
+    volumes:
+    - ./etl/:/code
+    depends_on:
+    - mongodb
+    - mypg
+  #4. Takes the clean data (=text, result of sentiment analysis, timestamp)
+  # stores for further use
+  mypg:
+    image: postgres
+    ports:
+    - 5555:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+
+  slackbot:
+    build: slack/
+    volumes:
+    - ./slack/:/code
+    depends_on: 
+    - mypg
