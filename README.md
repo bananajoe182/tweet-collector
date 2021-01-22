@@ -1,7 +1,7 @@
 # tweet-collector
 Full pipeline to collect tweets, do a sentiment analysis and store the results in a SQL database
 
-![tweet-collector](H:\Machine_Learning\Repos\OLI\tweet-collector\tweet-collector.png)
+![tweet-collector](tweet-collector.png)
 
 ##### This Docker Pipeline combines multiple tasks:
 
